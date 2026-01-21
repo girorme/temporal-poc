@@ -7,6 +7,11 @@ Project to test [temporal.io](https://temporal.io/) event sourcing
 
 ---
 
+### Start temporal cluster
+```bash
+$ temporal server start-dev --db-filename database/temporal.db
+```
+
 ### Run worker
 ```bash
 $ go run main.go
