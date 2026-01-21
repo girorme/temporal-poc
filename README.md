@@ -1,5 +1,6 @@
 Temporal POC
 ---
+Project to test [temporal.io](https://temporal.io/) event sourcing
 
 ## Pre reqs
 - [Setup temporal and golang](https://learn.temporal.io/getting_started/go/dev_environment/)
