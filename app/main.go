@@ -7,17 +7,21 @@ import (
 	"go.temporal.io/sdk/workflow"
 )
 
-func Greet(ctx workflow.Context, name string) (string, error) {
+type PingWorkflowOutput struct {
+	Result string
+}
+
+func Ping(ctx workflow.Context, input string) (PingWorkflowOutput, error) {
 	options := workflow.ActivityOptions{
 		StartToCloseTimeout: time.Second * 5,
 	}
 	ctx = workflow.WithActivityOptions(ctx, options)
 
-	var googleStatus string
-	err := workflow.ExecuteActivity(ctx, activities.GetOnGoogle).Get(ctx, &googleStatus)
+	var hostStatus activities.PingHostOutput
+	err := workflow.ExecuteActivity(ctx, activities.PingHost, activities.PingHostInput{Host: input}).Get(ctx, &hostStatus)
 	if err != nil {
-		return "", err
+		return PingWorkflowOutput{}, err
 	}
 
-	return googleStatus, nil
+	return PingWorkflowOutput{Result: hostStatus.Result}, nil
 }

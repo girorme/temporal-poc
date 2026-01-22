@@ -16,9 +16,9 @@ func main() {
 	}
 	defer c.Close()
 
-	w := worker.New(c, "greeting-tasks", worker.Options{})
-	w.RegisterWorkflow(app.Greet)
-	w.RegisterActivity(activities.GetOnGoogle)
+	w := worker.New(c, "ping-tasks", worker.Options{})
+	w.RegisterWorkflow(app.Ping)
+	w.RegisterActivity(activities.PingHost)
 
 	err = w.Run(worker.InterruptCh())
 	if err != nil {

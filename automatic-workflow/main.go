@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"math/rand"
 
 	"github.com/girorme/temporal-poc/app"
 	"go.temporal.io/sdk/client"
@@ -15,23 +17,24 @@ func main() {
 	}
 	defer c.Close()
 
+	randomId := rand.Intn(100000)
 	options := client.StartWorkflowOptions{
-		ID:        "greeting-workflow",
-		TaskQueue: "greeting-tasks",
+		ID:        fmt.Sprintf("ping-workflow-%d", randomId),
+		TaskQueue: "ping-tasks",
 	}
 
 	we, err := c.ExecuteWorkflow(
 		context.Background(),
 		options,
-		app.Greet,
-		"Girorme",
+		app.Ping,
+		"https://google.com",
 	)
 	if err != nil {
 		log.Fatalln("Unable to execute workflow", err)
 	}
 	log.Println("Started workflow", "WorkflowID", we.GetID(), "RunID", we.GetRunID())
 
-	var result string
+	var result app.PingWorkflowOutput
 	err = we.Get(context.Background(), &result)
 	if err != nil {
 		log.Fatalln("Unable to get workflow result", err)
