@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/girorme/temporal-poc/app"
+	"github.com/girorme/temporal-poc/app/activities"
 	"go.temporal.io/sdk/client"
 	"go.temporal.io/sdk/worker"
 )
@@ -17,6 +18,7 @@ func main() {
 
 	w := worker.New(c, "greeting-tasks", worker.Options{})
 	w.RegisterWorkflow(app.Greet)
+	w.RegisterActivity(activities.GetOnGoogle)
 
 	err = w.Run(worker.InterruptCh())
 	if err != nil {
